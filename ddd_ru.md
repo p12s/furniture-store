@@ -1,7 +1,11 @@
 # Проектирование Магазина мебели
 
+## 0. Event Storming
+![ES](https://github.com/p12s/furniture-store/blob/master/images/ES.png?raw=true)  
+[Обновляемая схема event storming](https://lucid.app/lucidchart/1482e706-4b6d-49f8-adce-e0b7932d8bbe/edit?viewport_loc=-128%2C-54%2C2307%2C1397%2C0_0&invitationId=inv_dd15d087-fe4e-4cea-b2f5-ce0f5ad99f35)  
+[Обновляемая схема доменной модели](https://www.xmind.net/m/EVD7bc)  
+  
 ## 1. Описываем query/comands (DDD)  
-
 #### Общий сервис аутентификации 
 Зарегистрироваться могут все, в одном месте **(command)** создание и возврат "ключа" - это изменение стейта  
 ```
@@ -11,7 +15,7 @@ Data    Account (login, password, name, email, address)
 Event   Account.SignedUp  
 ```
 
-#### Каталог    
+#### Заказ    
 Видеть товары магазина **(query, read model)**  
 Видеть список своих заказанных товаров (корзину, что в ней) **(query, read model)**  
 Положить товар в корзину **(command)**  
@@ -136,6 +140,7 @@ Event   Account.Disabled
 - Product: dealer_id, name, price, discount(%) 
   
 ## 3. Выделяем домены (по акторам/контексту)  
+[Обновляемая схема доменной модели](https://www.xmind.net/m/EVD7bc)  
 - Auth domain  
     - Account  
         - id  
