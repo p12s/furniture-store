@@ -10,3 +10,6 @@ System Design - microservices with asynchronous interaction is [here](ddd_ru.md)
 ## Domain model
 ![Domain model](https://github.com/p12s/furniture-store/blob/master/images/domain-model.png?raw=true)  
 [link](https://www.xmind.net/m/EVD7bc)  
+
+### Disclaimer  
+If you have any comments or think that you have found a mistake - feel free to create an issue!  
