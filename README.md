@@ -1,3 +1,10 @@
+![License](https://img.shields.io/github/license/p12s/furniture-store)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/p12s/furniture-store?style=plastic)
+[![codecov](https://codecov.io/gh/p12s/furniture-store/branch/master/graph/badge.svg?token=63DTDGHFF8)](https://codecov.io/gh/p12s/furniture-store)
+<img src="https://github.com/p12s/furniture-store/workflows/Linter/badge.svg?branch=master">
+<img src="https://github.com/p12s/furniture-store/workflows/Building/badge.svg?branch=master">
+<img src="https://github.com/p12s/furniture-store/workflows/Testing/badge.svg?branch=master">
+
 # Furniture store
 
 Technical task is [here](tech_ru.md)  
