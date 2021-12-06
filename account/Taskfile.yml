@@ -1,0 +1,64 @@
+# https://taskfile.dev/#/installation
+version: '3'
+
+silent: true
+
+tasks:
+  default:
+    task -l
+
+  2:
+    desc: Format code
+    cmds:
+      - task: tidy
+      - task: fmt
+      - task: lint
+
+  tidy:
+    cmds:
+      - echo "Tidy..."
+      - GO111MODULE=on go mod tidy
+
+  fmt:
+    cmds:
+      - echo "Fmt..."
+      - gofmt -w .
+
+  lint:
+    cmds:
+      - echo "Lint..."
+      - golangci-lint run
+  
+  3:
+    desc: Run testing - unit, integration, coverage
+    cmds:
+      - task: unit
+      - task: integ
+      - task: cover
+  
+  unit:
+    cmds:
+      - env GO111MODULE=on go test -short -race -coverprofile=cover.out ./...
+
+  unit-v:
+    cmds:
+      - env GO111MODULE=on go test -v -short -race -coverprofile=cover.out ./...
+
+  integ:
+    cmds:
+      - newman run postman/api.postman_collection.json
+
+  cover:
+    cmds:
+      - env GO111MODULE=on go tool cover -func=cover.out
+
+  4:
+    desc: Benchmarking
+    cmds:
+      - env GO111MODULE=on go test -bench=. -cpu=8 -benchmem -cpuprofile=cpu.out -memprofile=mem.out .
+
+  5:
+    desc: Download external modules
+    cmds:
+      - echo "Download..."
+      - GO111MODULE=on go mod download
