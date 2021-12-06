@@ -3,8 +3,6 @@ name: Linter
 on:
   push:
     branches: [ master ]
-    paths:
-      - 'account'
 
 jobs:
   golangci:
@@ -18,7 +16,8 @@ jobs:
         with:
           # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
           version: v1.43.0
-
+          working-directory: account
+          
           # Optional: golangci-lint command line arguments.
           # args: --issues-exit-code=0
           args: ./...
