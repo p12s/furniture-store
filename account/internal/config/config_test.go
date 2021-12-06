@@ -13,12 +13,21 @@ import (
 const THIS_PACKAGE_ENV_PATH = "/src/github.com/p12s/furniture-store/account/.env.example"
 
 func TestNew(t *testing.T) {
+	fmt.Println("os.Getenv GOPATH:", os.Getenv("GOPATH"))
 	goPath := os.Getenv("GOPATH")
 	if goPath == "" {
 		goPath = build.Default.GOPATH
 	}
+	fmt.Println("goPath:", goPath)
 
-	err := godotenv.Load(os.ExpandEnv(fmt.Sprintf("%s%s", goPath, THIS_PACKAGE_ENV_PATH)))
+	pwd, err := os.Getwd()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	fmt.Println("pwd:", pwd)
+
+	err = godotenv.Load(os.ExpandEnv(fmt.Sprintf("%s%s", goPath, THIS_PACKAGE_ENV_PATH)))
 	assert.Equal(t, nil, err)
 
 	_, err = New()
