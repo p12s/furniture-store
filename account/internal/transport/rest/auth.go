@@ -55,7 +55,7 @@ func (h *Handler) signIn(c *gin.Context) {
 	})
 }
 
-func (h *Handler) token(c *gin.Context) {
+func (h *Handler) token(c *gin.Context) { // nolint
 	accountId, err := getAccountId(c)
 	if err != nil {
 		newErrorResponse(c, http.StatusNotFound, err.Error())

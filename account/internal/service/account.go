@@ -1,8 +1,7 @@
 package service
 
 import (
-	"crypto/sha1"
-	"errors"
+	"crypto/sha1" // nolint
 	"fmt"
 	"time"
 
@@ -11,12 +10,6 @@ import (
 	"github.com/p12s/furniture-store/account/internal/domain"
 	"github.com/p12s/furniture-store/account/internal/repository"
 )
-
-// tokenClaims - tooken object
-type tokenClaims struct {
-	jwt.StandardClaims
-	AccountPublicId string `json:"public_id"`
-}
 
 type Accounter interface {
 	CreateAccount(account domain.Account) error
@@ -101,21 +94,21 @@ func (s *AccountService) ParseToken(token string) (string, error) {
 		return s.signingKey, nil
 	})
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("unexpected signing method: %w/n", err)
 	}
 
 	if !t.Valid {
-		return "", errors.New("invalid token")
+		return "", fmt.Errorf("invalid token")
 	}
 
 	claims, ok := t.Claims.(jwt.MapClaims)
 	if !ok {
-		return "", errors.New("invalid claims")
+		return "", fmt.Errorf("invalid claims")
 	}
 
 	subject, ok := claims["sub"].(string)
 	if !ok {
-		return "", errors.New("invalid subject")
+		return "", fmt.Errorf("invalid subject")
 	}
 
 	return subject, nil

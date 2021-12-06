@@ -132,7 +132,7 @@ func (k *Kafka) Subscribe(service *service.Service) error {
 	}
 
 	run := true
-	for run == true {
+	for run == true { // nolint
 		select {
 		case sig := <-sigchan:
 			logrus.Printf("Caught signal %v: terminating\n", sig)
@@ -161,16 +161,30 @@ func (k *Kafka) Subscribe(service *service.Service) error {
 func (k *Kafka) processEvent(event domain.Event, service *service.Service) {
 	switch event.Type {
 	case domain.EVENT_ACCOUNT_CREATED:
-		k.createAccount(event.Value, service)
+		err := k.createAccount(event.Value, service)
+		if err != nil {
+			logrus.Errorf("process 'create account' event fail: %s/n", err.Error())
+		}
 	case domain.EVENT_ACCOUNT_INFO_UPDATED:
-		k.updateAccountInfo(event.Value, service)
+		err := k.updateAccountInfo(event.Value, service)
+		if err != nil {
+			logrus.Errorf("process 'update account info' event fail: %s/n", err.Error())
+		}
 	case domain.EVENT_ACCOUNT_ROLE_UPDATED:
-		k.updateAccountRole(event.Value, service)
+		err := k.updateAccountRole(event.Value, service)
+		if err != nil {
+			logrus.Errorf("process 'update account role' event fail: %s/n", err.Error())
+		}
 	case domain.EVENT_ACCOUNT_TOKEN_UPDATED:
-		k.updateAccountToken(event.Value, service)
+		err := k.updateAccountToken(event.Value, service)
+		if err != nil {
+			logrus.Errorf("process 'update account token' event fail: %s/n", err.Error())
+		}
 	case domain.EVENT_ACCOUNT_DELETED:
-		k.deleteAccount(event.Value, service)
-
+		err := k.deleteAccount(event.Value, service)
+		if err != nil {
+			logrus.Errorf("process 'delete account' event fail: %s/n", err.Error())
+		}
 	default:
 		fmt.Println("unknown event type")
 	}

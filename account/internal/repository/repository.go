@@ -2,9 +2,9 @@ package repository
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/jmoiron/sqlx"
+	"github.com/sirupsen/logrus"
 )
 
 // Repository - repo
@@ -39,9 +39,15 @@ func createAccountTable(db *sqlx.DB) {
 		"created_at" DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 	  );`
 	statement, err := db.Prepare(query)
+	defer statement.Close() // nolint
 	if err != nil {
-		log.Fatal("create account.account table error", err.Error())
+		statement.Close()
+		logrus.Fatal("create account.account table fail: ", err.Error())
 	}
-	statement.Exec()
+	_, err = statement.Exec()
+	if err != nil {
+		logrus.Fatal("exec creating account.account table fail: ", err.Error())
+	}
+
 	fmt.Println("account.account table created 🗂")
 }

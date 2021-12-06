@@ -25,7 +25,7 @@ type Account struct {
 	Address   string     `json:"address" db:"address" binding:"required"` // TODO should be different columns - Country, City, Street, etc.
 	Token     string     `json:"token,omitempty"`
 	Role      Role       `json:"role" db:"role"`
-	CreatedAt *time.Time `json:"created_at,omitempty" db:"created_at"`
+	CreatedAt *time.Time `json:"created_at,omitempty" db:"created_at"` // nolint
 }
 
 type SignInInput struct {
@@ -63,7 +63,7 @@ const (
 	EVENT_ACCOUNT_INFO_UPDATED  EventType = "auth.info_updated"
 	EVENT_ACCOUNT_ROLE_UPDATED  EventType = "auth.role_updated"
 	EVENT_ACCOUNT_DELETED       EventType = "auth.deleted"
-	EVENT_ACCOUNT_TOKEN_UPDATED EventType = "auth.token_updated"
+	EVENT_ACCOUNT_TOKEN_UPDATED EventType = "auth.token_updated" // nolint
 )
 
 type Event struct {

@@ -35,8 +35,8 @@ linters:
     - varcheck
     - whitespace
     - durationcheck
-    - forbidigo
-    - forcetypeassert
+    # - forbidigo
+    # - forcetypeassert
     - ifshort
     - importas
     - nilerr
@@ -47,25 +47,25 @@ linters:
     - promlinter
     - bodyclose
     - dupl
-    - godot
+    # - godot
     - funlen
-    - wsl
+    # - wsl
     - gochecknoglobals
     - gochecknoinits
     - goconst
     - gocritic
-    - godox
-    - goerr113
+    # - godox
+    # - goerr113
     - gosec
     - noctx
     - prealloc
-    - stylecheck
+    # - stylecheck
     - testpackage
-    - cyclop
+    # - cyclop
     - errorlint
-    - nlreturn
-    - revive
-    - tagliatelle
+    # - nlreturn
+    # - revive
+    # - tagliatelle
     - unparam
 
 issues:

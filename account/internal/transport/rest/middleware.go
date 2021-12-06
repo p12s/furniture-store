@@ -45,7 +45,7 @@ func (h *Handler) userIdentity(c *gin.Context) {
 	c.Set(accountCtx, accountId)
 }
 
-func getAccountId(c *gin.Context) (int, error) {
+func getAccountId(c *gin.Context) (int, error) { // nolint
 	id, ok := c.Get(accountCtx)
 
 	if !ok {

@@ -7,7 +7,7 @@ import (
 	"github.com/p12s/furniture-store/account/internal/domain"
 )
 
-func (h *Handler) updateAccount(c *gin.Context) {
+func (h *Handler) updateAccount(c *gin.Context) { // nolint
 	var input domain.UpdateAccountInput
 
 	if err := c.BindJSON(&input); err != nil {

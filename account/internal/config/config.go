@@ -4,14 +4,14 @@ import "github.com/kelseyhightower/envconfig"
 
 // Config
 type Config struct {
-	Db           Db
+	DB           DB
 	Server       Server
 	Auth         Auth
 	Cloudkarafka Cloudkarafka
 }
 
-// Db
-type Db struct {
+// DB
+type DB struct {
 	Driver string `envconfig:"DB_DRIVER" required:"true"`
 }
 
@@ -39,7 +39,7 @@ type Cloudkarafka struct {
 func New() (*Config, error) {
 	cfg := new(Config)
 
-	if err := envconfig.Process("db", &cfg.Db); err != nil {
+	if err := envconfig.Process("db", &cfg.DB); err != nil {
 		return nil, err
 	}
 

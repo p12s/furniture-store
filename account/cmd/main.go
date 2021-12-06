@@ -32,7 +32,7 @@ func main() {
 		logrus.Fatalf("error loading env variables: %s\n", err.Error())
 	}
 
-	db, err := repository.NewSqlite3DB(repository.Config{Driver: cfg.Db.Driver})
+	db, err := repository.NewSqlite3DB(repository.Config{Driver: cfg.DB.Driver})
 	if err != nil {
 		logrus.Fatalf("failed to initialize db: %s\n", err.Error())
 	}
@@ -48,9 +48,6 @@ func main() {
 	})
 
 	kafka, err := broker.NewKafka(broker.KafkaConfig{})
-	/*, []string{
-		"",
-	}*/
 	if err != nil {
 		logrus.Fatalf("kafka error: %s\n", err.Error())
 	}
