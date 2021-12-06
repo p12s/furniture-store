@@ -2,23 +2,23 @@ package config
 
 import (
 	"fmt"
-	"go/build"
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
 )
 
-const THIS_PACKAGE_ENV_PATH = "/src/github.com/p12s/furniture-store/account/.env.example"
+const DIR_ENV_PATH = ".env.example"
 
 func TestNew(t *testing.T) {
-	fmt.Println("os.Getenv GOPATH:", os.Getenv("GOPATH"))
-	goPath := os.Getenv("GOPATH")
-	if goPath == "" {
-		goPath = build.Default.GOPATH
-	}
-	fmt.Println("goPath:", goPath)
+	// fmt.Println("os.Getenv GOPATH:", os.Getenv("GOPATH")) //
+	// goPath := os.Getenv("GOPATH")
+	// if goPath == "" {
+	// 	goPath = build.Default.GOPATH
+	// }
+	// fmt.Println("goPath:", goPath) // /home/runner/go
 
 	pwd, err := os.Getwd()
 	if err != nil {
@@ -26,8 +26,13 @@ func TestNew(t *testing.T) {
 		os.Exit(1)
 	}
 	fmt.Println("pwd:", pwd)
+	parentRoot := filepath.Dir(filepath.Dir(pwd))
+	fmt.Println("parentRoot:", parentRoot)
 
-	err = godotenv.Load(os.ExpandEnv(fmt.Sprintf("%s%s", goPath, THIS_PACKAGE_ENV_PATH)))
+	path := fmt.Sprintf("%s/%s", parentRoot, DIR_ENV_PATH)
+	fmt.Println("path-path-path:", path)
+
+	err = godotenv.Load(os.ExpandEnv(path))
 	assert.Equal(t, nil, err)
 
 	_, err = New()
