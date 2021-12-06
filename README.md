@@ -14,20 +14,3 @@ System Design - microservices with asynchronous interaction is [here](ddd_ru.md)
 ### Disclaimer  
 If you have any comments or think that you have found a mistake - feel free to create an issue!  
 
-
-
-
-
-
-
-internal/repository/repository.go:44:3: exitAfterDefer: log.Fatal will exit, and `defer statement.Close()` will not run (gocritic)
-		log.Fatal("create account.account table fail: ", err.Error())
-		^
-internal/transport/rest/account.go:10:19: func `(*Handler).updateAccount` is unused (unused)
-func (h *Handler) updateAccount(c *gin.Context) {
-                  ^
-internal/transport/rest/middleware.go:48:6: func `getAccountId` is unused (unused)
-func getAccountId(c *gin.Context) (int, error) {
-     ^
-internal/transport/rest/auth.go:58:19: func `(*Handler).token` is unused (unused)
-func (h *Handler) token(c *gin.Context) {
