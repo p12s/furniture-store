@@ -63,5 +63,7 @@ tasks:
       - echo "Download..."
       - GO111MODULE=on go mod download
 
-  7:
+  build:
+    cmds:
+      - echo "build-build..."
   
