@@ -1,4 +1,4 @@
-name: building
+name: Building
 
 on:
   push:
@@ -18,6 +18,6 @@ jobs:
 
       - name: Install Taskfile
         uses: arduino/setup-task@v1
-        
-      - name: Test
-        run: task build
+
+      - name: Building account service
+        run: cd account && task build && cd ..

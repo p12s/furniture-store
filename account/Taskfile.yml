@@ -63,5 +63,9 @@ tasks:
       - echo "Download..."
       - GO111MODULE=on go mod download
 
-  7:
+  build:
+    desc: Building service
+    cmds:
+      - echo "Building service..."
+      - go build cmd/main.go && rm main
   

@@ -1,4 +1,4 @@
-name: test
+name: Testing
 
 on:
   push:
@@ -19,5 +19,5 @@ jobs:
       - name: Install Taskfile
         uses: arduino/setup-task@v1
 
-      - name: Test account
-        run: cd account && task unit-v
+      - name: Test account service
+        run: cd account && task unit-v && cd ..

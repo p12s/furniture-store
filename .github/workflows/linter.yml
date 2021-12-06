@@ -1,4 +1,4 @@
-name: lint
+name: Linter
 
 on:
   push:
@@ -11,14 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2 # cloning current repo into docker-container
 
-      - name: golangci-lint
+      - name: Linting account service
         uses: golangci/golangci-lint-action@v2
         with:
           # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
           version: latest
-
-          # Optional: working directory, useful for monorepos
-          # working-directory: somedir
+          working-directory: account
 
           # Optional: golangci-lint command line arguments.
           # args: --issues-exit-code=0
