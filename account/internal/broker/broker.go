@@ -1,191 +1,49 @@
 package broker
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
 
-	"github.com/confluentinc/confluent-kafka-go/kafka"
-	"github.com/p12s/furniture-store/account/internal/domain"
+	_ "github.com/golang/mock/mockgen/model"
+	"github.com/p12s/furniture-store/account/internal/config"
 	"github.com/p12s/furniture-store/account/internal/service"
-	"github.com/sirupsen/logrus"
 )
 
-type Kafka struct {
-	Consumer *kafka.Consumer
-	Producer *kafka.Producer
-	Topics   map[string]string
+//go:generate mockgen -destination mocks/mock.go -package broker github.com/p12s/furniture-store/account/internal/broker Consumer,Producer
 
-	// TopicAccountBE   string
-	// TopicAccountCUD  string
-	// TopicProductBE   string
-	// TopicProductCUD  string
-	// TopicOrderBE     string
-	// TopicOrderCUD    string
-	// TopicDeliveryBE  string
-	// TopicDeliveryCUD string
+// Broker
+type Broker struct {
+	Producer
+	Consumer
+	TopicAccountBE, TopicAccountCUD   string
+	TopicProductBE, TopicProductCUD   string
+	TopicOrderBE, TopicOrderCUD       string
+	TopicDeliveryBE, TopicDeliveryCUD string
+	TopicBillingBE, TopicBillingCUD   string
 }
 
-type KafkaConfig struct {
-	Brokers, Username, Password, GroupId string
-	Topics                               map[string]string
-}
-
-func NewKafka(conf KafkaConfig) (*Kafka, error) {
-	producer, err := kafka.NewProducer(&kafka.ConfigMap{
-		"metadata.broker.list": conf.Brokers, // os.Getenv("CLOUDKARAFKA_BROKERS"),
-		"security.protocol":    "SASL_SSL",
-		"sasl.mechanisms":      "SCRAM-SHA-256",
-		"sasl.username":        conf.Username, // os.Getenv("CLOUDKARAFKA_USERNAME"),
-		"sasl.password":        conf.Password, // os.Getenv("CLOUDKARAFKA_PASSWORD"),
-	})
+// NewBroker - constructor
+func NewBroker(service *service.Service, config *config.Cloudkarafka) (*Broker, error) {
+	producer, err := NewProducer(config)
 	if err != nil {
-		return nil, fmt.Errorf("error in kafka constructor, while create producer: %w", err)
+		return nil, fmt.Errorf("broker producer fail: %w/n", err)
+	}
+	consumer, err := NewConsumer(service, config)
+	if err != nil {
+		return nil, fmt.Errorf("broker consumer fail: %w/n", err)
 	}
 
-	// TODO выкинуть консьюмер - в аккаунте он не нужен
-	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"metadata.broker.list": conf.Brokers, // os.Getenv("CLOUDKARAFKA_BROKERS"),
-		"security.protocol":    "SASL_SSL",
-		"sasl.mechanisms":      "SCRAM-SHA-256",
-		"sasl.username":        conf.Username, // os.Getenv("CLOUDKARAFKA_USERNAME"),
-		"sasl.password":        conf.Password, // os.Getenv("CLOUDKARAFKA_PASSWORD"),
-		"group.id":             conf.GroupId,  // os.Getenv("CLOUDKARAFKA_GROUP_ID"),
-		"auto.offset.reset":    "earliest",
-	})
-	if err != nil {
-		return nil, fmt.Errorf("error in kafka constructor, while create consumer: %w", err)
-	}
-
-	return &Kafka{
-		Producer: producer,
-		Consumer: consumer,
-		Topics:   conf.Topics,
-		// TopicAccountBE:  os.Getenv("CLOUDKARAFKA_TOPIC_PREFIX") + "account",
-		// TopicAccountCUD: os.Getenv("CLOUDKARAFKA_TOPIC_PREFIX") + "stream",
-		// TopicTaskBE:     os.Getenv("CLOUDKARAFKA_TOPIC_PREFIX") + "task",
-		// TopicTaskCUD:    os.Getenv("CLOUDKARAFKA_TOPIC_PREFIX") + "stream",
-		// TopicBillingBE:  os.Getenv("CLOUDKARAFKA_TOPIC_PREFIX") + "billing",
-		// TopicBillingCUD: os.Getenv("CLOUDKARAFKA_TOPIC_PREFIX") + "stream",
+	return &Broker{
+		Producer:         producer,
+		Consumer:         consumer,
+		TopicAccountBE:   config.TopicAccountBE,
+		TopicAccountCUD:  config.TopicAccountCUD,
+		TopicProductBE:   config.TopicProductBE,
+		TopicProductCUD:  config.TopicProductCUD,
+		TopicOrderBE:     config.TopicOrderBE,
+		TopicOrderCUD:    config.TopicOrderCUD,
+		TopicDeliveryBE:  config.TopicDeliveryBE,
+		TopicDeliveryCUD: config.TopicDeliveryCUD,
+		TopicBillingBE:   config.TopicBillingBE,
+		TopicBillingCUD:  config.TopicBillingCUD,
 	}, nil
-}
-
-// TODO зарефакторить eventTopic
-func (k *Kafka) Event(evetType domain.EventType, eventTopic string, eventPayload interface{}) {
-	deliveryChan := make(chan kafka.Event)
-
-	var data bytes.Buffer
-	if err := json.NewEncoder(&data).Encode(domain.Event{
-		Type:  evetType,
-		Value: eventPayload,
-	}); err != nil {
-		fmt.Printf("auth brocker data encode: %s\n", err.Error()) // TODO logrus
-		return
-	}
-
-	err := k.Producer.Produce(&kafka.Message{
-		TopicPartition: kafka.TopicPartition{
-			Topic:     &eventTopic,
-			Partition: kafka.PartitionAny,
-		},
-		Value: data.Bytes(),
-	}, deliveryChan)
-	if err != nil {
-		fmt.Printf("auth broker produce: %s\n", err.Error())
-		return
-	}
-
-	e := <-deliveryChan
-	m := e.(*kafka.Message)
-
-	if m.TopicPartition.Error != nil {
-		fmt.Printf("Delivery failed: %v\n", m.TopicPartition.Error)
-	} else {
-		fmt.Printf("Delivered message to topic %s [%d] at offset %v\n",
-			*m.TopicPartition.Topic, m.TopicPartition.Partition, m.TopicPartition.Offset)
-	}
-
-	close(deliveryChan)
-}
-
-func (k *Kafka) Subscribe(service *service.Service) error {
-	// if err := godotenv.Load(); err != nil {
-	// 	fmt.Printf("error loading env variables: %s\n", err.Error())
-	// 	return fmt.Errorf("error in kafka constructor, while create consumer: %w", err)
-	// }
-
-	// topics := []string{
-	// 	k.TopicAccountBE, k.TopicAccountCUD,
-	// 	k.TopicTaskBE, k.TopicBillingBE,
-	// }
-
-	sigchan := make(chan os.Signal, 1)
-	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
-
-	err := k.Consumer.SubscribeTopics([]string{"some"}, nil) // k.Topics to array
-	if err != nil {
-		return fmt.Errorf("subscribe topics kafka: %w", err)
-	}
-
-	run := true
-	for run == true { // nolint
-		select {
-		case sig := <-sigchan:
-			logrus.Printf("Caught signal %v: terminating\n", sig)
-			run = false
-		default:
-			ev, err := k.Consumer.ReadMessage(1 * time.Second)
-			if err != nil {
-				continue
-			}
-			fmt.Printf("✅ Message on %s:\nvalue: %s\n", ev.TopicPartition, string(ev.Value)) // TODO удалить вывод после реализации/обкатки всех событий
-			var eventData domain.Event
-			err = json.Unmarshal(ev.Value, &eventData)
-			if err != nil {
-				logrus.Errorf("Unmarshal error: %s\n", err.Error())
-				continue
-			}
-			k.processEvent(eventData, service)
-		}
-	}
-
-	logrus.Println("Closing consumer")
-	k.Consumer.Close()
-	return nil
-}
-
-func (k *Kafka) processEvent(event domain.Event, service *service.Service) {
-	switch event.Type {
-	case domain.EVENT_ACCOUNT_CREATED:
-		err := k.createAccount(event.Value, service)
-		if err != nil {
-			logrus.Errorf("process 'create account' event fail: %s/n", err.Error())
-		}
-	case domain.EVENT_ACCOUNT_INFO_UPDATED:
-		err := k.updateAccountInfo(event.Value, service)
-		if err != nil {
-			logrus.Errorf("process 'update account info' event fail: %s/n", err.Error())
-		}
-	case domain.EVENT_ACCOUNT_ROLE_UPDATED:
-		err := k.updateAccountRole(event.Value, service)
-		if err != nil {
-			logrus.Errorf("process 'update account role' event fail: %s/n", err.Error())
-		}
-	case domain.EVENT_ACCOUNT_TOKEN_UPDATED:
-		err := k.updateAccountToken(event.Value, service)
-		if err != nil {
-			logrus.Errorf("process 'update account token' event fail: %s/n", err.Error())
-		}
-	case domain.EVENT_ACCOUNT_DELETED:
-		err := k.deleteAccount(event.Value, service)
-		if err != nil {
-			logrus.Errorf("process 'delete account' event fail: %s/n", err.Error())
-		}
-	default:
-		fmt.Println("unknown event type")
-	}
 }

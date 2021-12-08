@@ -20,4 +20,8 @@ jobs:
         uses: arduino/setup-task@v1
 
       - name: Test account service
-        run: cd account && task unit-v && cd ..
+        run: cd account && task unit-v
+
+
+# остановился тут - добавить Codecov после тестов - загружать эти файлы в сервис
+# можн см пример тут https://github.com/codecov/codecov-action

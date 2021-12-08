@@ -1,5 +1,4 @@
 *.exe
-
 .docker_build/
 bin/
 .DS_Store
@@ -14,7 +13,6 @@ configs/config.yml
 api/files
 secrets/production
 frontend/.vscode
-
 zk-single-kafka-single/
 zk-*
 cmake-build-*/
@@ -28,3 +26,4 @@ crashlytics-build.properties
 fabric.properties
 .local-full-stack
 .connectors
+**/coverage.txt

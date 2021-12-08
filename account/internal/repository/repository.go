@@ -3,9 +3,12 @@ package repository
 import (
 	"fmt"
 
+	_ "github.com/golang/mock/mockgen/model"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 )
+
+//go:generate mockgen -destination mocks/mock.go -package repository github.com/p12s/furniture-store/account/internal/repository Accounter
 
 // Repository - repo
 type Repository struct {

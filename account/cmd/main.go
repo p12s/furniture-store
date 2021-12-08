@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
-	_ "github.com/mattn/go-sqlite3"
 	"github.com/p12s/furniture-store/account/internal/broker"
 	"github.com/p12s/furniture-store/account/internal/config"
 	"github.com/p12s/furniture-store/account/internal/repository"
@@ -41,17 +40,13 @@ func main() {
 	if err != nil {
 		logrus.Fatalf("failed to initialize authentication token ttl: %s\n", err.Error())
 	}
-	services := service.NewService(repos, &service.AccountConfig{
-		Salt:       cfg.Auth.Salt,
-		TokenTTL:   time.Duration(cfg.Auth.TokenTTL) * time.Second,
-		SigningKey: cfg.Auth.SigningKey,
-	})
+	services := service.NewService(repos, &cfg.Auth)
 
-	kafka, err := broker.NewKafka(broker.KafkaConfig{})
+	broker, err := broker.NewBroker(services, &cfg.Cloudkarafka)
 	if err != nil {
 		logrus.Fatalf("kafka error: %s\n", err.Error())
 	}
-	handlers := handler.NewHandler(services, kafka)
+	handlers := handler.NewHandler(services, broker)
 
 	srv := new(Server)
 	go func() {

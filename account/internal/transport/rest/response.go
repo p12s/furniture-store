@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -14,6 +15,8 @@ type errorResponse struct {
 
 // newErrorResponse - send error
 func newErrorResponse(c *gin.Context, statusCode int, message string) {
-	logrus.Printf("%s: [%s] - %s | %s", time.Now().Format(time.RFC3339), c.Request.Method, c.Request.RequestURI, message)
+	if os.Getenv("ENV_CURRENT") == os.Getenv("ENV_PROD") {
+		logrus.Printf("%s: [%s] - %s | %s", time.Now().Format(time.RFC3339), c.Request.Method, c.Request.RequestURI, message)
+	}
 	c.AbortWithStatusJSON(statusCode, errorResponse{message})
 }

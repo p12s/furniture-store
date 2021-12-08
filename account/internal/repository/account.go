@@ -9,6 +9,8 @@ import (
 	"github.com/p12s/furniture-store/account/internal/domain"
 )
 
+var _ Accounter = (*Account)(nil)
+
 type Accounter interface {
 	CreateAccount(account domain.Account) error
 	UpdateAccountInfo(input domain.UpdateAccountInput) error

@@ -21,7 +21,7 @@ type Account struct {
 	Name      string     `json:"name" db:"name" binding:"required"`
 	Username  string     `json:"username" db:"username" binding:"required"`
 	Password  string     `json:"password,omitempty" db:"password_hash" binding:"required"`
-	Email     string     `json:"email" db:"email" binding:"unique=email,required"`
+	Email     string     `json:"email" db:"email" binding:"required"`
 	Address   string     `json:"address" db:"address" binding:"required"` // TODO should be different columns - Country, City, Street, etc.
 	Token     string     `json:"token,omitempty"`
 	Role      Role       `json:"role" db:"role"`

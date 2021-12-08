@@ -1,6 +1,5 @@
 FROM golang:1.17.2-buster AS build
 
-RUN go version
 ENV GOPATH=/
 WORKDIR /src/
 COPY ./ /src/
@@ -26,4 +25,4 @@ RUN ls -la && pwd
 
 CMD ["./app"]
 
-HEALTHCHECK --interval=5s --timeout=3s --start-period=1s CMD curl --fail http://127.0.0.1:8001/health || exit 1
+HEALTHCHECK --interval=5s --timeout=3s --start-period=1s CMD curl --fail http://127.0.0.1:8002/health || exit 1

@@ -7,9 +7,12 @@ import (
 
 	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
+	"github.com/p12s/furniture-store/account/internal/config"
 	"github.com/p12s/furniture-store/account/internal/domain"
 	"github.com/p12s/furniture-store/account/internal/repository"
 )
+
+var _ Accounter = (*AccountService)(nil)
 
 type Accounter interface {
 	CreateAccount(account domain.Account) error
@@ -29,16 +32,19 @@ type AccountService struct {
 }
 
 // NewAccountService - constructor
-func NewAccountService(repo repository.Accounter, config *AccountConfig) *AccountService {
+func NewAccountService(repo repository.Accounter, config *config.Auth) *AccountService {
 	return &AccountService{
 		repo:       repo,
 		salt:       config.Salt,
-		tokenTTL:   config.TokenTTL,
+		tokenTTL:   time.Duration(config.TokenTTL),
 		signingKey: config.SigningKey,
 	}
 }
 
 func (s *AccountService) CreateAccount(account domain.Account) error {
+	account.PublicId = uuid.New()
+	account.Role = domain.ROLE_CUSTOMER
+
 	passwordHash, err := s.generatePasswordHash(account.Password)
 	if err != nil {
 		return fmt.Errorf("generate password: %w", err)

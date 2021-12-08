@@ -38,11 +38,11 @@ tasks:
   
   unit:
     cmds:
-      - env GO111MODULE=on go test -short -race -coverprofile=cover.out ./...
+      - env GO111MODULE=on go test -short -race -coverprofile=coverage.txt -covermode=atomic ./...
 
   unit-v:
     cmds:
-      - env GO111MODULE=on go test -v -short -race -coverprofile=cover.out ./...
+      - env GO111MODULE=on go test -v -short -race -coverprofile=coverage.txt -covermode=atomic ./...
 
   integ:
     cmds:
@@ -69,3 +69,10 @@ tasks:
       - echo "Building service..."
       - go build cmd/main.go && rm main
   
+  mock-gen:
+    desc: Generate mocks
+    cmds:
+      - echo "Mock..."
+      - echo " broker " && cd internal/broker && go generate
+      - echo " repo " && cd internal/repository && go generate
+      - echo " service " && cd internal/service && go generate

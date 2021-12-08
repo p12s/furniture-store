@@ -10,10 +10,10 @@ import (
 
 type Handler struct {
 	services *service.Service
-	broker   *broker.Kafka
+	broker   *broker.Broker
 }
 
-func NewHandler(services *service.Service, broker *broker.Kafka) *Handler {
+func NewHandler(services *service.Service, broker *broker.Broker) *Handler {
 	return &Handler{services: services, broker: broker}
 }
 
