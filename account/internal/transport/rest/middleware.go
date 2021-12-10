@@ -38,7 +38,7 @@ func (h *Handler) userIdentity(c *gin.Context) {
 
 	accountId, err := h.services.Accounter.ParseToken(headerParts[1])
 	if err != nil {
-		newErrorResponse(c, http.StatusUnauthorized, err.Error())
+		newErrorResponse(c, http.StatusUnauthorized, "invalid token")
 		return
 	}
 

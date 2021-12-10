@@ -22,7 +22,7 @@ type Broker struct {
 }
 
 // NewBroker - constructor
-func NewBroker(service *service.Service, config *config.Cloudkarafka) (*Broker, error) {
+func NewBroker(service *service.Service, config *config.Broker) (*Broker, error) {
 	producer, err := NewProducer(config)
 	if err != nil {
 		return nil, fmt.Errorf("broker producer fail: %w/n", err)

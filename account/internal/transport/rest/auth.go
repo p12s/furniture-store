@@ -38,40 +38,20 @@ func (h *Handler) signUp(c *gin.Context) {
 // в то время как account_id (int) может отличаться
 func (h *Handler) signIn(c *gin.Context) {
 	var input domain.SignInInput
-
 	if err := c.BindJSON(&input); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
 		return
 	}
 
 	accountToken, err := h.services.Accounter.GenerateTokenByCreds(input.Email, input.Password)
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		newErrorResponse(c, http.StatusInternalServerError, "service failure")
 		return
 	}
 
-	go h.broker.Producer.Produce(domain.EVENT_ACCOUNT_TOKEN_UPDATED, "h.broker.TopicAccountCUD", accountToken)
+	go h.broker.Producer.Produce(domain.EVENT_ACCOUNT_TOKEN_UPDATED, h.broker.TopicAccountCUD, accountToken)
 
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"token": accountToken,
 	})
-}
-
-func (h *Handler) token(c *gin.Context) { // nolint
-	accountId, err := getAccountId(c)
-	if err != nil {
-		newErrorResponse(c, http.StatusNotFound, err.Error())
-		return
-	}
-	_ = accountId
-	/*
-		account, err := h.services.GetAccountById(accountId) // TODO доабвить GetAccountById
-		// TODO если "no rows in result set" - возвращать осмысленный текст
-		if err != nil {
-			newErrorResponse(c, http.StatusNotFound, err.Error())
-			return
-		}
-	*/
-
-	c.JSON(http.StatusOK, nil)
 }

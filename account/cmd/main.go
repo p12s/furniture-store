@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 	"runtime"
+	"strconv"
 	"syscall"
 	"time"
 
@@ -41,8 +42,7 @@ func main() {
 		logrus.Fatalf("failed to initialize authentication token ttl: %s\n", err.Error())
 	}
 	services := service.NewService(repos, &cfg.Auth)
-
-	broker, err := broker.NewBroker(services, &cfg.Cloudkarafka)
+	broker, err := broker.NewBroker(services, &cfg.Broker)
 	if err != nil {
 		logrus.Fatalf("kafka error: %s\n", err.Error())
 	}
@@ -50,11 +50,11 @@ func main() {
 
 	srv := new(Server)
 	go func() {
-		if err := srv.Run(os.Getenv("PORT"), handlers.InitRoutes()); err != nil {
+		if err := srv.Run(cfg.Server.Port, handlers.InitRoutes()); err != nil {
 			logrus.Fatalf("error while running http server: %s\n", err.Error())
 		}
 	}()
-	logrus.Print("😀 account app started with port: ", os.Getenv("PORT"))
+	logrus.Print("😀 account app started with port: ", cfg.Server.Port)
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
@@ -67,6 +67,7 @@ func main() {
 	if err := db.Close(); err != nil {
 		logrus.Errorf("error occurred on db connection close: %s", err.Error())
 	}
+	// TODO broker close
 }
 
 // Server - http server
@@ -75,9 +76,9 @@ type Server struct {
 }
 
 // Run - start
-func (s *Server) Run(port string, handler http.Handler) error {
+func (s *Server) Run(port int, handler http.Handler) error {
 	s.httpServer = &http.Server{
-		Addr:           ":" + port,
+		Addr:           ":" + strconv.Itoa(port),
 		Handler:        handler,
 		MaxHeaderBytes: 1 << 20, // 1 MB
 		ReadTimeout:    10 * time.Second,

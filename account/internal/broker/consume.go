@@ -37,7 +37,14 @@ type BrokerConsume struct {
 	TopicBillingBE, TopicBillingCUD   string
 }
 
-func NewConsumer(service *service.Service, conf *config.Cloudkarafka) (*BrokerConsume, error) {
+/*
+bootstrap.servers=pkc-ymrq7.us-east-2.aws.confluent.cloud:9092
+security.protocol=SASL_SSL
+sasl.mechanisms=PLAIN
+sasl.username=CACZVZ73UCMBIVCF
+sasl.password=8OV1S2+OMVMHSD0/Hquxk8RpxmNpYASSoTcedOXZZ8JMx9c8QjhAgBXqx2rNYfMC
+*/
+func NewConsumer(service *service.Service, conf *config.Broker) (*BrokerConsume, error) {
 	connection, err := kafka.NewConsumer(&kafka.ConfigMap{
 		"metadata.broker.list": conf.Brokers,
 		"security.protocol":    SECURITY_PROTOCOL,

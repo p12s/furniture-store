@@ -4,11 +4,11 @@ import "github.com/kelseyhightower/envconfig"
 
 // Config
 type Config struct {
-	DB           DB
-	Server       Server
-	Auth         Auth
-	Cloudkarafka Cloudkarafka
-	Env          Env
+	DB     DB
+	Server Server
+	Auth   Auth
+	Broker Broker
+	Env    Env
 }
 
 // DB
@@ -28,23 +28,23 @@ type Auth struct {
 	SigningKey string `envconfig:"AUTH_SIGNING_KEY" required:"true"`
 }
 
-// Cloudkarafka
-type Cloudkarafka struct {
-	TopicPrefix      string `envconfig:"CLOUDKARAFKA_TOPIC_PREFIX" required:"true"`
-	Brokers          string `envconfig:"CLOUDKARAFKA_BROKERS" required:"true"`
-	Username         string `envconfig:"CLOUDKARAFKA_USERNAME" required:"true"`
-	Password         string `envconfig:"CLOUDKARAFKA_PASSWORD" required:"true"`
-	TopicAccountBE   string `envconfig:"CLOUDKARAFKA_TOPIC_ACCOUNT_BE" required:"true"`
-	TopicAccountCUD  string `envconfig:"CLOUDKARAFKA_TOPIC_ACCOUNT_CUD" required:"true"`
-	TopicProductBE   string `envconfig:"CLOUDKARAFKA_TOPIC_PRODUCT_BE" required:"true"`
-	TopicProductCUD  string `envconfig:"CLOUDKARAFKA_TOPIC_PRODUCT_CUD" required:"true"`
-	TopicOrderBE     string `envconfig:"CLOUDKARAFKA_TOPIC_ORDER_BE" required:"true"`
-	TopicOrderCUD    string `envconfig:"CLOUDKARAFKA_TOPIC_ORDER_CUD" required:"true"`
-	TopicDeliveryBE  string `envconfig:"CLOUDKARAFKA_TOPIC_DELIVERY_BE" required:"true"`
-	TopicDeliveryCUD string `envconfig:"CLOUDKARAFKA_TOPIC_DELIVERY_CUD" required:"true"`
-	TopicBillingBE   string `envconfig:"CLOUDKARAFKA_TOPIC_BILLING_BE" required:"true"`
-	TopicBillingCUD  string `envconfig:"CLOUDKARAFKA_TOPIC_BILLING_CUD" required:"true"`
-	GroupId          string `envconfig:"CLOUDKARAFKA_GROUP_ID" required:"true"`
+// Broker
+type Broker struct {
+	// TopicPrefix      string `envconfig:"BROKER_TOPIC_PREFIX" required:"true"`
+	Brokers          string `envconfig:"BROKER_BROKERS" required:"true"`
+	Username         string `envconfig:"BROKER_USERNAME" required:"true"`
+	Password         string `envconfig:"BROKER_PASSWORD" required:"true"`
+	TopicAccountBE   string `envconfig:"BROKER_TOPIC_ACCOUNT_BE" required:"true"`
+	TopicAccountCUD  string `envconfig:"BROKER_TOPIC_ACCOUNT_CUD" required:"true"`
+	TopicProductBE   string `envconfig:"BROKER_TOPIC_PRODUCT_BE" required:"true"`
+	TopicProductCUD  string `envconfig:"BROKER_TOPIC_PRODUCT_CUD" required:"true"`
+	TopicOrderBE     string `envconfig:"BROKER_TOPIC_ORDER_BE" required:"true"`
+	TopicOrderCUD    string `envconfig:"BROKER_TOPIC_ORDER_CUD" required:"true"`
+	TopicDeliveryBE  string `envconfig:"BROKER_TOPIC_DELIVERY_BE" required:"true"`
+	TopicDeliveryCUD string `envconfig:"BROKER_TOPIC_DELIVERY_CUD" required:"true"`
+	TopicBillingBE   string `envconfig:"BROKER_TOPIC_BILLING_BE" required:"true"`
+	TopicBillingCUD  string `envconfig:"BROKER_TOPIC_BILLING_CUD" required:"true"`
+	GroupId          string `envconfig:"BROKER_GROUP_ID" required:"true"`
 }
 
 // Env
@@ -71,7 +71,7 @@ func New() (*Config, error) {
 		return nil, err
 	}
 
-	if err := envconfig.Process("cloudkarafka", &cfg.Cloudkarafka); err != nil {
+	if err := envconfig.Process("broker", &cfg.Broker); err != nil {
 		return nil, err
 	}
 

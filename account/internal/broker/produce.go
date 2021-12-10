@@ -14,7 +14,7 @@ import (
 
 const (
 	SECURITY_PROTOCOL = "SASL_SSL"
-	SASL_MECHANISMS   = "SCRAM-SHA-256"
+	SASL_MECHANISMS   = "PLAIN" // "SCRAM-SHA-256"
 )
 
 var _ Producer = (*BrokerProduce)(nil)
@@ -25,14 +25,9 @@ type Producer interface {
 
 type BrokerProduce struct {
 	connection *kafka.Producer
-	// TopicAccountBE, TopicAccountCUD   string
-	// TopicProductBE, TopicProductCUD   string
-	// TopicOrderBE, TopicOrderCUD       string
-	// TopicDeliveryBE, TopicDeliveryCUD string
-	// TopicBillingBE, TopicBillingCUD   string
 }
 
-func NewProducer(conf *config.Cloudkarafka) (*BrokerProduce, error) { // ???? return error
+func NewProducer(conf *config.Broker) (*BrokerProduce, error) { // ???? return error
 	connection, err := kafka.NewProducer(&kafka.ConfigMap{
 		"metadata.broker.list": conf.Brokers,
 		"security.protocol":    SECURITY_PROTOCOL,
@@ -46,16 +41,6 @@ func NewProducer(conf *config.Cloudkarafka) (*BrokerProduce, error) { // ???? re
 
 	return &BrokerProduce{
 		connection: connection,
-		// TopicAccountBE:   conf.TopicAccountBE,
-		// TopicAccountCUD:  conf.TopicAccountCUD,
-		// TopicProductBE:   conf.TopicProductBE,
-		// TopicProductCUD:  conf.TopicProductCUD,
-		// TopicOrderBE:     conf.TopicOrderBE,
-		// TopicOrderCUD:    conf.TopicOrderCUD,
-		// TopicDeliveryBE:  conf.TopicDeliveryBE,
-		// TopicDeliveryCUD: conf.TopicDeliveryBE,
-		// TopicBillingBE:   conf.TopicBillingBE,
-		// TopicBillingCUD:  conf.TopicBillingCUD,
 	}, nil
 }
 

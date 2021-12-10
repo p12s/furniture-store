@@ -21,7 +21,7 @@ func (h *Handler) updateAccount(c *gin.Context) { // nolint
 		return
 	}
 
-	go h.broker.Producer.Produce(domain.EVENT_ACCOUNT_INFO_UPDATED, "h.broker.TopicAccountBE", input)
+	go h.broker.Produce(domain.EVENT_ACCOUNT_INFO_UPDATED, "h.broker.TopicAccountBE", input)
 
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "OK",
@@ -44,7 +44,7 @@ func (h *Handler) deleteAccount(c *gin.Context) {
 		return
 	}
 
-	go h.broker.Producer.Produce(domain.EVENT_ACCOUNT_DELETED, "h.broker.TopicAccountCUD", input)
+	go h.broker.Produce(domain.EVENT_ACCOUNT_DELETED, "h.broker.TopicAccountCUD", input)
 
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "OK",
