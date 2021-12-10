@@ -44,7 +44,6 @@ func NewAccountService(repo repository.Accounter, config *config.Auth) *AccountS
 func (s *AccountService) CreateAccount(account domain.Account) error {
 	account.PublicId = uuid.New()
 	account.Role = domain.ROLE_CUSTOMER
-
 	passwordHash, err := s.generatePasswordHash(account.Password)
 	if err != nil {
 		return fmt.Errorf("generate password: %w", err)
@@ -88,7 +87,7 @@ func (s *AccountService) GenerateTokenByCreds(email, password string) (string, e
 		ExpiresAt: time.Now().Add(s.tokenTTL).Unix(),
 	})
 
-	return token.SignedString(s.signingKey)
+	return token.SignedString([]byte(s.signingKey))
 }
 
 func (s *AccountService) ParseToken(token string) (string, error) {

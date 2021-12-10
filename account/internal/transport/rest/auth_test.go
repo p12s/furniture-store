@@ -43,7 +43,6 @@ func init() {
 }
 
 func TestHandler_signUp(t *testing.T) {
-	t.Parallel()
 
 	type accountMockBehavior func(s *mock_service.MockAccounter, account domain.Account)
 	type brokerMockProducer func(s *mock_broker.MockProducer, event domain.EventType, topic string, input interface{})
@@ -86,7 +85,7 @@ func TestHandler_signUp(t *testing.T) {
 				s.EXPECT().Produce(event, topic, input).Return(nil)
 			},
 			expectedStatusCode:  http.StatusCreated,
-			expectedRequestBody: `null`,
+			expectedRequestBody: ``,
 		},
 		{
 			name:      "Can't sign up with input without name",
@@ -194,7 +193,6 @@ func TestHandler_signUp(t *testing.T) {
 }
 
 func TestHandler_signIn(t *testing.T) {
-	//t.Parallel()
 
 	type accountMockBehavior func(s *mock_service.MockAccounter, input domain.SignInInput)
 	type brokerMockProducer func(s *mock_broker.MockProducer, event domain.EventType, topic string, input interface{})

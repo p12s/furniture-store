@@ -8,6 +8,14 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// @Summary Sign up
+// @Tags Auth
+// @Description Create account
+// @ID signUp
+// @Accept  json
+// @Param input body domain.Account true "credentials"
+// @Success 201
+// @Router /sign-up [post]
 func (h *Handler) signUp(c *gin.Context) {
 	var input domain.Account
 	if err := c.BindJSON(&input); err != nil {
@@ -29,13 +37,18 @@ func (h *Handler) signUp(c *gin.Context) {
 		}
 	}()
 
-	c.JSON(http.StatusCreated, nil)
+	c.Status(http.StatusCreated)
 }
 
-// TODO здесь и в других сервисах в токене юзера храню account_id (int) -
-// первичный ключ из БД сервиса auth
-// по-хорошему надо хранить public_id (uuid.UUID) - он одинаковый во всех сервисах
-// в то время как account_id (int) может отличаться
+// @Summary Sign in
+// @Tags Auth
+// @Description Sending data to get authentication with jwt-token
+// @ID signIn
+// @Accept  json
+// @Produce  json
+// @Param input body domain.SignInInput true "credentials"
+// @Success 200
+// @Router /sign-in [post]
 func (h *Handler) signIn(c *gin.Context) {
 	var input domain.SignInInput
 	if err := c.BindJSON(&input); err != nil {

@@ -45,17 +45,17 @@ func (h *Handler) userIdentity(c *gin.Context) {
 	c.Set(accountCtx, accountId)
 }
 
-func getAccountId(c *gin.Context) (int, error) { // nolint
-	id, ok := c.Get(accountCtx)
+func getAccountPublicId(c *gin.Context) (string, error) { // nolint
+	value, ok := c.Get(accountCtx)
 
 	if !ok {
-		return 0, errors.New("account id not found")
+		return "", errors.New("account publicId not found")
 	}
 
-	idInt, ok := id.(int)
+	publicId, ok := value.(string)
 	if !ok {
-		return 0, errors.New("account id is of invalid type")
+		return "", errors.New("account publicId is of invalid type")
 	}
 
-	return idInt, nil
+	return publicId, nil
 }
