@@ -3,8 +3,8 @@
 ## Functional requirements   
 ![ES](https://github.com/p12s/furniture-store/blob/master/account/images/account-functions.png?raw=true)  
   
-- любой пользователь 
-	- может зерегистрироваться, по-умолчанию у него роль - покупатель, он ее не видит и изменить не может
-		- у него есть: логин/пароль, имя/фам, мейл, адрес
-	- может авторизоваться (получить токен)  
+- any user   
+	- can be registered, by default he has a role - customer, he does not see it and cannot change  
+		- he has: login/password, name/surname, mail, address  
+	- can login (can get a token)   
     
