@@ -13,6 +13,7 @@ const (
 	accountCtx           = "accountPublicId"
 )
 
+// userIdentity - checking token
 func (h *Handler) userIdentity(c *gin.Context) {
 	header := c.GetHeader(authorizationHandler)
 	if header == "" {
@@ -22,11 +23,6 @@ func (h *Handler) userIdentity(c *gin.Context) {
 
 	headerParts := strings.Split(header, " ")
 	if len(headerParts) != 2 || headerParts[0] != "Bearer" {
-		newErrorResponse(c, http.StatusUnauthorized, "invalid auth header")
-		return
-	}
-
-	if headerParts[0] != "Bearer" {
 		newErrorResponse(c, http.StatusUnauthorized, "invalid auth header")
 		return
 	}
@@ -45,17 +41,17 @@ func (h *Handler) userIdentity(c *gin.Context) {
 	c.Set(accountCtx, accountId)
 }
 
-func getAccountPublicId(c *gin.Context) (string, error) { // nolint
-	value, ok := c.Get(accountCtx)
-
+// getAccountPublicId - getting current account public_id
+func getAccountPublicId(c *gin.Context) (string, error) {
+	id, ok := c.Get(accountCtx)
 	if !ok {
-		return "", errors.New("account publicId not found")
+		return "", errors.New("account public_id not found")
 	}
 
-	publicId, ok := value.(string)
+	idString, ok := id.(string)
 	if !ok {
-		return "", errors.New("account publicId is of invalid type")
+		return "", errors.New("account id is of invalid type")
 	}
 
-	return publicId, nil
+	return idString, nil
 }

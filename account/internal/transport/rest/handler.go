@@ -8,15 +8,18 @@ import (
 	"github.com/p12s/furniture-store/account/internal/service"
 )
 
+// Handler
 type Handler struct {
 	services *service.Service
 	broker   *broker.Broker
 }
 
+// NewHandler - constructor
 func NewHandler(services *service.Service, broker *broker.Broker) *Handler {
 	return &Handler{services: services, broker: broker}
 }
 
+// InitRoutes - routes
 func (h *Handler) InitRoutes() *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
@@ -28,15 +31,15 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	account := router.Group("/account", h.userIdentity)
 	{
-		// account.GET("/", h.getAccountInfo)
-		// account.PUT("/info", h.updateAccount)
-		// account.PUT("/role", h.updateAccountRole)
+		account.GET("/", h.getAccountInfo)
+		account.PUT("/info", h.updateAccount)
 		account.DELETE("/", h.deleteAccount)
 	}
 
 	return router
 }
 
+// CORSMiddleware - cross site work
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Header("Access-Control-Allow-Origin", "*")

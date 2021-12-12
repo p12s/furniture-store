@@ -25,7 +25,7 @@ func NewRepository(db *sqlx.DB) *Repository {
 }
 
 // Deliberately removed the obligation of important fields (name, username, password_hash, ...),
-// because the architecture is asynchronous, a Business-event with only role (role)
+// because the architecture is asynchronous, the business-event with only role (role)
 // can come before a CUD-event with all other data.
 
 // createAccountTable

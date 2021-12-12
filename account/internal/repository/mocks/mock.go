@@ -8,7 +8,6 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	uuid "github.com/google/uuid"
 	domain "github.com/p12s/furniture-store/account/internal/domain"
 )
 
@@ -50,7 +49,7 @@ func (mr *MockAccounterMockRecorder) CreateAccount(arg0 interface{}) *gomock.Cal
 }
 
 // DeleteAccount mocks base method.
-func (m *MockAccounter) DeleteAccount(arg0 uuid.UUID) error {
+func (m *MockAccounter) DeleteAccount(arg0 string) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteAccount", arg0)
 	ret0, _ := ret[0].(error)
@@ -61,6 +60,21 @@ func (m *MockAccounter) DeleteAccount(arg0 uuid.UUID) error {
 func (mr *MockAccounterMockRecorder) DeleteAccount(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteAccount", reflect.TypeOf((*MockAccounter)(nil).DeleteAccount), arg0)
+}
+
+// GetAccount mocks base method.
+func (m *MockAccounter) GetAccount(arg0 string) (domain.Account, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAccount", arg0)
+	ret0, _ := ret[0].(domain.Account)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAccount indicates an expected call of GetAccount.
+func (mr *MockAccounterMockRecorder) GetAccount(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAccount", reflect.TypeOf((*MockAccounter)(nil).GetAccount), arg0)
 }
 
 // GetByCredentials mocks base method.

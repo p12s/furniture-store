@@ -4,29 +4,33 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/p12s/furniture-store/account/internal/domain"
 )
 
 var _ Accounter = (*Account)(nil)
 
+// Accounter - repository interface
 type Accounter interface {
 	CreateAccount(account domain.Account) error
+	GetAccount(publicId string) (domain.Account, error)
 	UpdateAccountInfo(input domain.UpdateAccountInput) error
 	UpdateAccountRole(input domain.UpdateAccountRoleInput) error
-	DeleteAccount(accountPublicId uuid.UUID) error
+	DeleteAccount(accountPublicId string) error
 	GetByCredentials(email, password string) (domain.Account, error)
 }
 
+// Account
 type Account struct {
 	db *sqlx.DB
 }
 
+// NewAccount - constructor
 func NewAccount(db *sqlx.DB) *Account {
 	return &Account{db: db}
 }
 
+// CreateAccount
 func (r *Account) CreateAccount(account domain.Account) error {
 	query := fmt.Sprintf(`INSERT INTO %s (public_id, name, username, password_hash, email, address, role)
 		values ($1, $2, $3, $4, $5, $6, $7)`, accountTable)
@@ -35,6 +39,20 @@ func (r *Account) CreateAccount(account domain.Account) error {
 	return err
 }
 
+// GetAccount
+func (r *Account) GetAccount(publicId string) (domain.Account, error) {
+	var account domain.Account
+
+	query := fmt.Sprintf(`SELECT * FROM %s WHERE public_id=$1`, accountTable)
+	err := r.db.Get(&account, query, publicId)
+	if err != nil {
+		return account, fmt.Errorf("get account: %w", err)
+	}
+
+	return account, err
+}
+
+// UpdateAccountInfo
 func (r *Account) UpdateAccountInfo(input domain.UpdateAccountInput) error {
 	setValues := make([]string, 0)
 	args := make([]interface{}, 0)
@@ -80,18 +98,21 @@ func (r *Account) UpdateAccountInfo(input domain.UpdateAccountInput) error {
 	return err
 }
 
+// UpdateAccountRole
 func (r *Account) UpdateAccountRole(input domain.UpdateAccountRoleInput) error {
 	query := fmt.Sprintf(`UPDATE %s SET role=$1 WHERE public_id = $2`, accountTable)
 	_, err := r.db.Exec(query, input.Role, input.PublicId)
 	return err
 }
 
-func (r *Account) DeleteAccount(accountPublicId uuid.UUID) error {
+// DeleteAccount
+func (r *Account) DeleteAccount(accountPublicId string) error {
 	query := fmt.Sprintf(`DELETE FROM %s WHERE public_id = $1`, accountTable)
-	_, err := r.db.Exec(query, accountPublicId.String())
+	_, err := r.db.Exec(query, accountPublicId)
 	return err
 }
 
+// GetByCredentials
 func (r *Account) GetByCredentials(email, password string) (domain.Account, error) {
 	var account domain.Account
 

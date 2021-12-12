@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// Role
 type Role int
 
 const (
@@ -15,6 +16,7 @@ const (
 	ROLE_DEALER
 )
 
+// Account
 type Account struct {
 	Id        int        `json:"id,omitempty" db:"id"`
 	PublicId  uuid.UUID  `json:"public_id" db:"public_id"`
@@ -28,11 +30,13 @@ type Account struct {
 	CreatedAt *time.Time `json:"created_at,omitempty" db:"created_at"` // nolint
 }
 
+// SignInInput
 type SignInInput struct {
 	Email    string `json:"email" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 
+// UpdateAccountInput
 type UpdateAccountInput struct {
 	PublicId uuid.UUID `json:"public_id" db:"public_id" binding:"required"`
 	Name     *string   `json:"name" db:"role"`
@@ -42,20 +46,24 @@ type UpdateAccountInput struct {
 	Address  *string   `json:"address" db:"address"`
 }
 
+// UpdateAccountRoleInput
 type UpdateAccountRoleInput struct {
 	PublicId uuid.UUID `json:"public_id" db:"public_id" binding:"required"`
 	Role     Role      `json:"role" db:"role" binding:"required"`
 }
 
+// AccountToken
 type AccountToken struct {
 	PublicId uuid.UUID `json:"public_id" db:"public_id" binding:"required"`
 	Token    string    `json:"token" db:"token" binding:"token"`
 }
 
+// DeleteAccountInput
 type DeleteAccountInput struct {
-	PublicId uuid.UUID `json:"public_id" db:"public_id" binding:"required"`
+	PublicId string `json:"public_id" db:"public_id" binding:"required"`
 }
 
+// EventType
 type EventType string
 
 const (
@@ -66,6 +74,7 @@ const (
 	EVENT_ACCOUNT_TOKEN_UPDATED EventType = "auth.token_updated" // nolint
 )
 
+// Event
 type Event struct {
 	Type  EventType
 	Value interface{}
