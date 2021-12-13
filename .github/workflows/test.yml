@@ -22,6 +22,12 @@ jobs:
       - name: Test account service
         run: cd account && task unit-v
 
+      - name: Upload coverage to Codecov (demo)
+        uses: ./
+        with:
+          files: ./account/coverage.txt,./coverage.txt
+          file: ./account/coverage.txt
+          name: codecov-demo
 
 # остановился тут - добавить Codecov после тестов - загружать эти файлы в сервис
 # можн см пример тут https://github.com/codecov/codecov-action

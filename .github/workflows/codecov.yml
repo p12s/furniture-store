@@ -22,5 +22,10 @@ jobs:
       - name: Generate coverage report
         run: task unit
 
-      - name: Upload coverage to Codecov
-        run: bash <(curl -s https://codecov.io/bash)
+      - name: Upload coverage to Codecov (demo)
+        uses: ./
+        with:
+          file: ./coverage.txt
+          name: codecov-demo
+      # - name: Upload coverage to Codecov
+      #   run: bash <(curl -s https://codecov.io/bash)
