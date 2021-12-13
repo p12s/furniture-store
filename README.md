@@ -3,7 +3,6 @@
 [![codecov](https://codecov.io/gh/p12s/furniture-store/branch/master/graph/badge.svg?token=63DTDGHFF8)](https://codecov.io/gh/p12s/furniture-store)
 <img src="https://github.com/p12s/furniture-store/workflows/Linter/badge.svg?branch=master">
 <img src="https://github.com/p12s/furniture-store/workflows/Building/badge.svg?branch=master">
-<img src="https://github.com/p12s/furniture-store/workflows/Testing/badge.svg?branch=master">
 
 # Furniture store
 
