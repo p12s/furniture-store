@@ -54,6 +54,11 @@ func (r *Account) GetAccount(publicId string) (domain.Account, error) {
 
 // UpdateAccountInfo
 func (r *Account) UpdateAccountInfo(input domain.UpdateAccountInput) error {
+	tx, err := r.db.Begin()
+	if err != nil {
+		return err
+	}
+
 	setValues := make([]string, 0)
 	args := make([]interface{}, 0)
 	argId := 1
@@ -94,8 +99,16 @@ func (r *Account) UpdateAccountInfo(input domain.UpdateAccountInput) error {
 		accountTable, setQuery, argId)
 	args = append(args, input.PublicId.String())
 
-	_, err := r.db.Exec(query, args...)
-	return err
+	_, err = r.db.Exec(query, args...)
+	if err != nil {
+		rollbackErr := tx.Rollback()
+		if rollbackErr != nil {
+			return rollbackErr
+		}
+		return nil
+	}
+
+	return tx.Commit()
 }
 
 // UpdateAccountRole

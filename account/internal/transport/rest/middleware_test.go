@@ -22,8 +22,6 @@ func TestHandler_userIdentity(t *testing.T) {
 	type brokerMockProducer func(s *mock_broker.MockProducer, event domain.EventType, topic string, input interface{})
 
 	token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzcyNzgxMjQsImlhdCI6MTYzNzIzNDkyNCwiYWNjb3VudF9pZCI6NH0.QiTQv3yHwYQwdSKQ3FwFFoMnlq07lSQwYm2w4tozfA0"
-	publicId := "265cee57-2ff9-4ed3-85e1-d3373fa2a1a5"
-	_ = publicId
 
 	tests := []struct {
 		name                string
