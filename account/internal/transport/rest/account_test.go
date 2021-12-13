@@ -39,7 +39,6 @@ func init() {
 }
 
 func TestHandler_updateAccount(t *testing.T) {
-
 	type accountMockBehavior func(s *mock_service.MockAccounter, account domain.UpdateAccountInput)
 	type brokerMockProducer func(s *mock_broker.MockProducer, event domain.EventType, topic string, input interface{})
 
@@ -163,7 +162,6 @@ func TestHandler_updateAccount(t *testing.T) {
 }
 
 func TestHandler_deleteAccount(t *testing.T) {
-
 	type accountMockBehavior func(s *mock_service.MockAccounter, account domain.DeleteAccountInput)
 	type brokerMockProducer func(s *mock_broker.MockProducer, event domain.EventType, topic string, input interface{})
 
@@ -261,7 +259,6 @@ func TestHandler_deleteAccount(t *testing.T) {
 }
 
 func TestHandler_getAccountInfo(t *testing.T) {
-
 	type accountMockBehavior func(s *mock_service.MockAccounter, publicId string, account domain.Account)
 
 	publicId := "265cee57-2ff9-4ed3-85e1-d3373fa2a1a5"

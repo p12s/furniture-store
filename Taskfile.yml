@@ -1,0 +1,28 @@
+# https://taskfile.dev/#/installation
+version: '3'
+
+silent: true
+
+tasks:
+  default:
+    task -l
+  
+  unit:
+    cmds:
+      - echo "Unit..."
+      - go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+
+  unit-v:
+    cmds:
+      - echo "Unit -v ..."
+      - go test -v -race -coverprofile=coverage.txt -covermode=atomic ./...
+
+  cover:
+    cmds:
+      - echo "Cover..."
+      - go tool cover -func=coverage.txt
+
+  lint:
+    cmds:
+      - echo "Lint..."
+      - golangci-lint run

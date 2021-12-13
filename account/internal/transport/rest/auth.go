@@ -62,7 +62,12 @@ func (h *Handler) signIn(c *gin.Context) {
 		return
 	}
 
-	go h.broker.Producer.Produce(domain.EVENT_ACCOUNT_TOKEN_UPDATED, h.broker.TopicAccountCUD, accountToken)
+	go func() {
+		err := h.broker.Producer.Produce(domain.EVENT_ACCOUNT_TOKEN_UPDATED, h.broker.TopicAccountCUD, accountToken)
+		if err != nil {
+			logrus.Errorf("sent sign-in event fail: %s/n", err.Error())
+		}
+	}()
 
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"token": accountToken,

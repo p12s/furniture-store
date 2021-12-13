@@ -50,7 +50,7 @@ tasks:
 
   cover:
     cmds:
-      - env GO111MODULE=on go tool cover -func=cover.out
+      - env GO111MODULE=on go tool cover -func=coverage.txt
 
   4:
     desc: Benchmarking

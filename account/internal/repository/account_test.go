@@ -154,7 +154,6 @@ func TestAccount_CreateAccount(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-
 			tt.mockBehavior(tt.args)
 
 			err := repo.CreateAccount(tt.args.account)
@@ -224,7 +223,6 @@ func TestAccount_GetAccount(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-
 			tt.mockBehavior(tt.args)
 
 			account, err := repo.GetAccount(tt.args.publicId)

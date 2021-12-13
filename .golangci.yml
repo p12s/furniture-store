@@ -14,7 +14,7 @@ linters:
     - gocognit
     - gocyclo
     - gofmt
-    - gofumpt
+    # - gofumpt
     - goheader
     - goimports
     - gomodguard
@@ -33,7 +33,7 @@ linters:
     - unconvert
     - unused
     - varcheck
-    - whitespace
+    # - whitespace
     - durationcheck
     # - forbidigo
     # - forcetypeassert
@@ -51,7 +51,7 @@ linters:
     - funlen
     # - wsl
     - gochecknoglobals
-    - gochecknoinits
+    # - gochecknoinits
     - goconst
     - gocritic
     # - godox
@@ -60,7 +60,7 @@ linters:
     - noctx
     - prealloc
     # - stylecheck
-    - testpackage
+    # - testpackage
     # - cyclop
     - errorlint
     # - nlreturn
