@@ -1,13 +1,27 @@
-![License](https://img.shields.io/github/license/p12s/furniture-store)
-![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/p12s/furniture-store?style=plastic)
-[![codecov](https://codecov.io/gh/p12s/furniture-store/branch/master/graph/badge.svg?token=63DTDGHFF8)](https://codecov.io/gh/p12s/furniture-store)
-<img src="https://github.com/p12s/furniture-store/workflows/Linter/badge.svg?branch=master">
-<img src="https://github.com/p12s/furniture-store/workflows/Building/badge.svg?branch=master">
+<div align="center">
+<article style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+  <h1 style="width: 100%; text-align: center;">Furniture store</h1>
+  <p>Simple store system. Technical task is <a href="tech_ru.md">here</a></p>
+  <p>System Design - microservices with asynchronous interaction is <a href="ddd_ru.md">here</a></p>
+</article>
 
-# Furniture store
+<div align="center">
 
-Technical task is [here](tech_ru.md)  
-System Design - microservices with asynchronous interaction is [here](ddd_ru.md)  
+[![GO][go-badge]][go-url] [![codecov][codecov-badge]][codecov-url] [![LICENSE][license-badge]][license-url] [![Linter][linter-badge]][linter-url] [![Building][building-badge]][building-url]
+  
+[license-badge]: https://img.shields.io/npm/l/@douyinfe/semi-ui
+[license-url]: https://github.com/p12s/furniture-store/blob/master/LICENSE
+[codecov-badge]: https://codecov.io/gh/p12s/furniture-store/branch/master/graph/badge.svg?token=63DTDGHFF8
+[codecov-url]: https://codecov.io/gh/p12s/furniture-store
+[go-badge]: https://img.shields.io/github/go-mod/go-version/p12s/furniture-store?style=plastic
+[go-url]: https://github.com/p12s/furniture-store/blob/master/go.mod
+[linter-badge]: https://github.com/p12s/furniture-store/workflows/Linter/badge.svg?branch=master
+[linter-url]: https://github.com/p12s/furniture-store/actions/workflows/linter.yml
+[building-badge]: https://github.com/p12s/furniture-store/workflows/Building/badge.svg?branch=master
+[building-url]: https://github.com/p12s/furniture-store/actions/workflows/building.yml
+
+</div>
+</div>
 
 ## Event storming schema
 ![ES](https://github.com/p12s/furniture-store/blob/master/images/ES.png?raw=true)  
