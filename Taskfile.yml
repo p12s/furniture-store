@@ -15,7 +15,7 @@ tasks:
   unit-v:
     cmds:
       - echo "Unit -v ..."
-      - GO111MODULE=on go test -v -race -coverprofile=coverage.txt -covermode=atomic ./...
+      - go test -v -race -coverprofile=coverage.txt -covermode=atomic ./...
 
   cover:
     cmds:
