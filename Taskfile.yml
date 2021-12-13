@@ -10,7 +10,7 @@ tasks:
   unit:
     cmds:
       - echo "Unit..."
-      - go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+      - go test -coverprofile=coverage.txt -covermode=atomic ./...
 
   unit-v:
     cmds:
