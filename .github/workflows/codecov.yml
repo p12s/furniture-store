@@ -23,9 +23,16 @@ jobs:
         run: task unit
 
       - name: Upload coverage to Codecov (demo)
-        uses: ./
+        uses: codecov/codecov-action@v2
         with:
-          file: ./coverage.txt
-          name: codecov-demo
+          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+          files: ./coverage.txt #./coverage1.xml,./coverage2.xml # optional
+          flags: unittests # optional
+          name: codecov-umbrella # optional
+          fail_ci_if_error: true # optional (default = false)
+          verbose: true # optional (default = false)
+          
+          #file: ./coverage.txt
+          #name: codecov-demo
       # - name: Upload coverage to Codecov
       #   run: bash <(curl -s https://codecov.io/bash)
