@@ -20,29 +20,12 @@ jobs:
       - name: Test account service
         run: cd account && go test -coverprofile=coverage.txt -covermode=atomic ./...
 
-      # - name: Generate coverage report
-      #   run: GO111MODULE=on go test -coverprofile=coverage.txt -covermode=atomic ./...
-
       - name: Upload coverage to Codecov (demo)
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
           files: ./account/coverage.txt #./coverage1.xml,./coverage2.xml # optional
-          flags: unittests # optional
-          name: codecov-umbrella # optional
-          fail_ci_if_error: true # optional (default = false)
-          verbose: true # optional (default = false)
-
-      
-
-      # - name: Upload coverage to Codecov (demo)
-      #   uses: ./
-      #   with:
-      #     files: ./account/coverage.txt,./coverage.txt
-      #     file: ./account/coverage.txt
-      #     name: codecov-demo
-
-          #file: ./coverage.txt
-          #name: codecov-demo
-      # - name: Upload coverage to Codecov
-      #   run: bash <(curl -s https://codecov.io/bash)
+          flags: unittests        # optional
+          name: codecov-umbrella  # optional
+          fail_ci_if_error: true  # optional (default = false)
+          verbose: true           # optional (default = false)
