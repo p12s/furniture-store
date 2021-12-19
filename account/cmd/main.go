@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"runtime"
 	"strconv"
 	"syscall"
 	"time"
@@ -21,7 +20,6 @@ import (
 )
 
 func main() {
-	runtime.GOMAXPROCS(1)
 	logrus.SetFormatter(new(logrus.JSONFormatter))
 
 	if err := godotenv.Load(); err != nil {
